@@ -11,5 +11,6 @@
   "hubot-shipit",
   "hubot-youtube",
   "hubot-fliptable",
-  "hubot-tell"
+  "hubot-tell",
+  "hubot-grafana"
 ]

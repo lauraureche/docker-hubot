@@ -1,9 +1,8 @@
-FROM node:4.4.3-slim
-MAINTAINER Justin Garrison <justinleegarrison@gmail.com>
+FROM node:8-slim
 
 # Install CoffeeScript, Hubot
 RUN \
-  npm install -g coffee-script hubot yo generator-hubot && \
+  npm install -g coffee-script hubot yeoman-doctor yo generator-hubot && \
   rm -rf /var/lib/apt/lists/*
 
 # make user for bot
@@ -29,5 +28,12 @@ ENV HUBOT_NAME hubot
 ENV HUBOT_ADAPTER slack
 ENV HUBOT_DESCRIPTION Just a friendly robot
 
+RUN /usr/local/bin/yo hubot --help
+
+RUN yes n | /usr/local/bin/yo hubot --adapter ${HUBOT_ADAPTER} --owner ${HUBOT_OWNER} --name ${HUBOT_NAME} --description ${HUBOT_DESCRIPTION} --defaults --no-insight; exit 0 && \
+  npm audit fix && \
+  npm install && \
+  npm audit fix --force
+
 # Override adapter with --env-file ENV
-ENTRYPOINT ./hubot-start.sh
+ENTRYPOINT bin/hubot
